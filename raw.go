@@ -24,6 +24,7 @@ const (
 	tagOctetString     = 0x04
 	tagNull            = 0x05
 	tagOid             = 0x06
+	tagUTF8String      = 0x0c
 	tagSequence        = 0x10
 	tagSet             = 0x11
 	tagPrintableString = 0x13
