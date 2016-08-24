@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/big"
 	"reflect"
+	"time"
 )
 
 // Pre-calculated types for convenience
@@ -339,6 +340,16 @@ func (ctx *Context) decodeNull(data []byte, value reflect.Value) error {
 	}
 	if len(data) != 0 {
 		return parseError("invalid data for Null type")
+	}
+	return nil
+}
+
+func (ctx *Context) decodeUtcTime(data []byte, value reflect.Value) error {
+	// Check type
+	type1 := value.Type()
+	if !(type1 == reflect.TypeOf(time.Time{})) {
+		// Invalid type or element type
+		return wrongType("time.Time", value)
 	}
 	return nil
 }
