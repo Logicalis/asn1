@@ -5,6 +5,7 @@ import (
 	"io"
 	"reflect"
 	"sort"
+	"time"
 )
 
 // Expected values
@@ -326,6 +327,10 @@ func (ctx *Context) getUniversalTagByKind(objType reflect.Type, opts *fieldOptio
 			elem.tag = tagSequence
 			elem.decoder = ctx.decodeSlice
 		}
+	}
+	if objType == reflect.TypeOf(time.Time{}) {
+		elem.tag = tagUtcTime
+		elem.decoder = ctx.decodeUtcTime
 	}
 	return
 }
