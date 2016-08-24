@@ -410,7 +410,7 @@ func (ctx *Context) matchExpectedValues(eValues []expectedFieldElement, rValues 
 		missing := true
 		if rIndex < len(rValues) {
 			raw := rValues[rIndex]
-			if raw.Tag == tagPrintableString || raw.Tag == tagUTF8String {
+			if raw.Tag == tagPrintableString || raw.Tag == tagUTF8String || raw.Tag == tagBitString {
 				raw.Tag = tagOctetString
 			}
 			if e.class == raw.Class && e.tag == raw.Tag {
