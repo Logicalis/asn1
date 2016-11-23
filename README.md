@@ -5,7 +5,7 @@
 
 Package asn1 implements encoding and decoding of ASN.1 data structures using
 both Basic Encoding Rules (BER) or its subset, the Distinguished Encoding Rules
-(BER).
+(DER).
 
 This package is highly inspired by the Go standard package "encoding/asn1" while
 supporting additional features such as BER encoding and decoding and ASN.1
