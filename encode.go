@@ -37,10 +37,7 @@ func (ctx *Context) EncodeWithOptions(obj interface{}, options string) (data []b
 func (ctx *Context) encode(value reflect.Value, opts *fieldOptions) (*rawValue, error) {
 
 	// Skip the interface type
-	switch value.Kind() {
-	case reflect.Interface:
-		value = value.Elem()
-	}
+	value = getActualType(value)
 
 	// If a value is missing the default value is used
 	empty := isEmpty(value)

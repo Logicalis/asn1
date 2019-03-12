@@ -4,6 +4,7 @@ import (
 	"math/big"
 	"reflect"
 	"testing"
+	"fmt"
 )
 
 // isBytesEqual compares two byte arrays/slices.
@@ -26,9 +27,14 @@ type testCase struct {
 	expected []byte
 }
 
+func (t testCase) String() string {
+	return fmt.Sprintf("testCase: value %#v (%T) expects %#v", t.value, t.value, t.expected)
+}
+
 // testEncode encodes an object and compares with the expected bytes.
 func testEncode(t *testing.T, ctx *Context, options string, tests ...testCase) {
 	for _, test := range tests {
+		t.Logf("Testing case: %v", test)
 		data, err := ctx.EncodeWithOptions(test.value, options)
 		if err != nil {
 			t.Fatal(err)
@@ -669,4 +675,31 @@ func TestArraySlice(t *testing.T) {
 	}
 	ctx := NewContext()
 	testEncodeDecode(t, ctx, "", testCases...)
+}
+
+func TestPointerInterface(t *testing.T) {
+	type I interface {}
+	type Type struct {
+		A int
+		B string
+		C bool
+	}
+	var obj I
+	obj = &Type{1, "abc", true}
+	ctx := NewContext()
+	// We cannot use testSimple because the type is I
+	data, err := ctx.Encode(obj)
+	if err != nil {
+		t.Fatal(err)
+	}
+	value := new(Type)
+	rest, err := ctx.Decode(data, value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rest) > 0 {
+		t.Fatalf("Unexpected remaining bytes when decoding \"%v\": %#v\n",
+			obj, rest)
+	}
+	checkEqual(t, obj, value)
 }
