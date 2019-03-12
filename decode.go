@@ -138,6 +138,10 @@ func (ctx *Context) DecodeWithOptions(data []byte, obj interface{}, options stri
 	if err != nil {
 		return nil, err
 	}
+	// Return nil if the ignore tag is given
+	if opts == nil {
+		return
+	}
 
 	value := reflect.ValueOf(obj)
 	switch value.Kind() {
@@ -340,6 +344,10 @@ func (ctx *Context) getExpectedFieldElements(value reflect.Value) ([]expectedFie
 			opts, err := parseOptions(value.Type().Field(i).Tag.Get(tagKey))
 			if err != nil {
 				return nil, err
+			}
+			// Skip if the ignore tag is given
+			if opts == nil {
+				continue
 			}
 			// Expand choices
 			raw := &rawValue{}

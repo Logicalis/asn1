@@ -23,6 +23,10 @@ func (ctx *Context) EncodeWithOptions(obj interface{}, options string) (data []b
 	if err != nil {
 		return nil, err
 	}
+	// Return nil if the ignore tag is given
+	if opts == nil {
+		return
+	}
 
 	value := reflect.ValueOf(obj)
 	raw, err := ctx.encode(value, opts)
@@ -229,6 +233,10 @@ func (ctx *Context) getRawValuesFromFields(value reflect.Value) ([]*rawValue, er
 			opts, err := parseOptions(tag)
 			if err != nil {
 				return nil, err
+			}
+			// Skip if the ignore tag is given
+			if opts == nil {
+				continue
 			}
 			raw, err := ctx.encode(fieldValue, opts)
 			if err != nil {

@@ -430,6 +430,38 @@ func TestDerSet(t *testing.T) {
 	}
 }
 
+func TestIgnore(t *testing.T) {
+	type Type struct {
+		B string
+		C bool `asn1:"-"`
+	}
+	encodeTest := testCase{
+		Type{"abc", true},
+		[]byte{
+			// SEQ LEN=8
+			0x30, 0x05,
+			// OCTETSTRING LEN=3
+			0x04, 0x03,
+			// "abc"
+			0x61, 0x62, 0x63,
+		},
+	}
+	decodeTest := testCase{
+		Type{"abc", false},
+		[]byte{
+			// SEQ LEN=8
+			0x30, 0x05,
+			// OCTETSTRING LEN=3
+			0x04, 0x03,
+			// "abc"
+			0x61, 0x62, 0x63,
+		},
+	}
+	ctx := NewContext()
+	testEncode(t, ctx, "", encodeTest)
+	testDecode(t, ctx, "", decodeTest)
+}
+
 func TestOptional(t *testing.T) {
 	type Type struct {
 		A int `asn1:"optional"`

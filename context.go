@@ -169,6 +169,10 @@ func (ctx *Context) AddChoice(choice string, entries []Choice) error {
 		if err != nil {
 			return err
 		}
+		// Skip if the ignore tag is given
+		if opts == nil {
+			continue
+		}
 		if opts.choice != nil {
 			// TODO Add support for nested choices.
 			return syntaxError(

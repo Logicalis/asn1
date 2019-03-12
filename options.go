@@ -38,8 +38,11 @@ func (opts *fieldOptions) validate() error {
 	return nil
 }
 
-// parseOption returns a parsed fieldOptions or an error.
+// parseOption returns a parsed fieldOptions or an error. Returns nil for the ignore tag "-".
 func parseOptions(s string) (*fieldOptions, error) {
+	if s == "-" {
+		return nil, nil
+	}
 	var opts fieldOptions
 	for _, token := range strings.Split(s, ",") {
 		args := strings.Split(strings.TrimSpace(token), ":")
